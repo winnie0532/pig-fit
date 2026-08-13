@@ -1,41 +1,101 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PigFit</title>
-  <link rel="stylesheet" href="style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
+  <main class="game-shell">
 
-  <main class="app">
-
-    <h1>PigFit 🐷</h1>
-
-    <section class="pig-card">
-
-      <div id="pig" class="pig">
-        🐷
+    <header class="top-bar">
+      <div>
+        <p class="eyebrow">COUPLE FITNESS GAME</p>
+        <h1>PIGFIT</h1>
       </div>
 
-      <h2>
-        <span id="pigWeight">55.0</span> kg
-      </h2>
+      <div class="day-badge">
+        DAY <span id="dayCount">1</span>
+      </div>
+    </header>
 
-      <p id="pigMessage">
-        今天還沒有人幫我減肥。
-      </p>
+    <section class="game-card">
+
+      <div class="status-bar">
+        <span>WEIGHT</span>
+        <strong><span id="pigWeight">55.0</span> KG</strong>
+      </div>
+
+      <div class="pig-stage">
+        <div class="pixel-cloud cloud-one"></div>
+        <div class="pixel-cloud cloud-two"></div>
+
+        <div id="pig" class="pig">
+          🐷
+        </div>
+
+        <div class="ground"></div>
+      </div>
+
+      <div class="message-box">
+        <p id="pigMessage">
+          今天還沒有人幫我減肥。
+        </p>
+      </div>
+
+      <div class="meter-wrap">
+        <div class="meter-label">
+          <span>BODY SIZE</span>
+          <span id="bodyStatus">NORMAL</span>
+        </div>
+
+        <div class="meter">
+          <div id="meterFill" class="meter-fill"></div>
+        </div>
+      </div>
 
     </section>
 
-    <button id="exerciseButton">
-      🏃 繳交運動
-    </button>
+    <section class="players">
+
+      <article class="player-card">
+        <p class="player-name">WINNIE</p>
+        <p class="player-status" id="winnieStatus">NOT YET</p>
+      </article>
+
+      <article class="player-card">
+        <p class="player-name">JACK</p>
+        <p class="player-status" id="jackStatus">NOT YET</p>
+      </article>
+
+    </section>
+
+    <section class="actions">
+      <button id="winnieExerciseButton" class="pixel-button primary">
+        WINNIE WORKOUT
+      </button>
+
+      <button id="jackExerciseButton" class="pixel-button">
+        JACK WORKOUT
+      </button>
+
+      <button id="resetButton" class="pixel-button danger">
+        RESET
+      </button>
+    </section>
 
   </main>
 
   <script src="script.js"></script>
-
 </body>
 </html>
