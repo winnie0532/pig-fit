@@ -322,8 +322,6 @@ function submitWorkout(user) {
 
     saveData();
 
-    animatePig();
-
     updateUI();
 
 
@@ -467,9 +465,7 @@ function updatePigAppearance() {
             "--pig-scale",
             status.scale
         );
-
-        pigElement.style.transform =
-            `scale(${status.scale})`;
+        
     }
 
 
@@ -603,30 +599,6 @@ function updateMessage() {
 
     pigMessageElement.textContent =
         getPigStatus().message;
-}
-
-
-// ============================================================
-// Animation
-// ============================================================
-
-function animatePig() {
-
-    if (!pigElement) {
-        return;
-    }
-
-    pigElement.classList.remove(
-        "bounce"
-    );
-
-    // Force browser reflow so animation
-    // can play again
-    void pigElement.offsetWidth;
-
-    pigElement.classList.add(
-        "bounce"
-    );
 }
 
 
