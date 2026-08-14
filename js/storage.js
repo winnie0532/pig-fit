@@ -2,9 +2,12 @@
 // PigFit - Storage
 // ============================================================
 
-export const STORAGE_KEY = "pigFitData";
+import { db } from "./firebase.js";
+import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-export const DEFAULT_WEIGHT = 20;
+export const DEFAULT_WEIGHT = 10;
+
+const PIG_DOCUMENT = doc(db, "pigfit", "sharedPig");
 
 
 // ============================================================
@@ -16,17 +19,10 @@ export function createDefaultData() {
 
     return {
         weight: DEFAULT_WEIGHT,
-
         createdAt: now,
-
-        // Last time pig weight was calculated
         lastUpdatedAt: now,
-
-        // Last rewarded workout date
         winnieWorkoutDate: null,
         jackWorkoutDate: null,
-
-        // Workout history
         workouts: []
     };
 }
@@ -36,52 +32,30 @@ export function createDefaultData() {
 // Load
 // ============================================================
 
-export function loadData() {
-    const savedData =
-        localStorage.getItem(STORAGE_KEY);
-
-    if (!savedData) {
-        return createDefaultData();
-    }
-
+export async function loadData() {
     try {
-        const parsedData =
-            JSON.parse(savedData);
+        const snapshot = await getDoc(PIG_DOCUMENT);
+
+        if (!snapshot.exists()) {
+            const newData = createDefaultData();
+            await saveData(newData);
+            return newData;
+        }
+
+        const savedData = snapshot.data();
+        const now = Date.now();
 
         return {
-            weight:
-                typeof parsedData.weight === "number"
-                    ? parsedData.weight
-                    : DEFAULT_WEIGHT,
-
-            createdAt:
-                parsedData.createdAt ||
-                Date.now(),
-
-            lastUpdatedAt:
-                parsedData.lastUpdatedAt ||
-                Date.now(),
-
-            winnieWorkoutDate:
-                parsedData.winnieWorkoutDate ||
-                null,
-
-            jackWorkoutDate:
-                parsedData.jackWorkoutDate ||
-                null,
-
-            workouts:
-                Array.isArray(parsedData.workouts)
-                    ? parsedData.workouts
-                    : []
+            weight: typeof savedData.weight === "number" ? savedData.weight : DEFAULT_WEIGHT,
+            createdAt: savedData.createdAt || now,
+            lastUpdatedAt: savedData.lastUpdatedAt || now,
+            winnieWorkoutDate: savedData.winnieWorkoutDate || null,
+            jackWorkoutDate: savedData.jackWorkoutDate || null,
+            workouts: Array.isArray(savedData.workouts) ? savedData.workouts : []
         };
 
     } catch (error) {
-        console.error(
-            "Failed to load PigFit data:",
-            error
-        );
-
+        console.error("Failed to load PigFit data:", error);
         return createDefaultData();
     }
 }
@@ -91,11 +65,12 @@ export function loadData() {
 // Save
 // ============================================================
 
-export function saveData(data) {
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(data)
-    );
+export async function saveData(data) {
+    try {
+        await setDoc(PIG_DOCUMENT, data);
+    } catch (error) {
+        console.error("Failed to save PigFit data:", error);
+    }
 }
 
 
@@ -103,13 +78,10 @@ export function saveData(data) {
 // Reset
 // ============================================================
 
-export function resetData() {
-    localStorage.removeItem(STORAGE_KEY);
+export async function resetData() {
+    const newData = createDefaultData();
 
-    const newData =
-        createDefaultData();
-
-    saveData(newData);
+    await saveData(newData);
 
     return newData;
 }

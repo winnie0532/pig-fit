@@ -48,7 +48,7 @@ const pigSpriteElement = document.querySelector(".pig-sprite");
 // Game Data
 // ============================================================
 
-let data = loadData();
+let data = await loadData();
 
 
 // ============================================================
@@ -316,27 +316,16 @@ if (jackExerciseButton) {
 // ============================================================
 
 if (resetButton) {
-    resetButton.addEventListener(
-        "click",
-        () => {
+    resetButton.addEventListener("click", async () => {
+        const confirmed = confirm("確定要重置 PigFit 嗎？所有運動紀錄都會消失。");
 
-            const confirmed =
-                confirm(
-                    "確定要重置 PigFit 嗎？所有運動紀錄都會消失。"
-                );
-
-            if (!confirmed) {
-                return;
-            }
-
-
-            data =
-                resetData();
-
-
-            updateUI();
+        if (!confirmed) {
+            return;
         }
-    );
+
+        data = await resetData();
+        updateUI();
+    });
 }
 
 
