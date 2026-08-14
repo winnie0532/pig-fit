@@ -248,37 +248,20 @@ function updateUI() {
 // Handle Workout
 // ============================================================
 
-function handleWorkout(user) {
-
-    // First calculate weight gain up to
-    // this exact moment.
+async function handleWorkout(user) {
     updatePigWeight(data);
 
-
-    const result =
-        submitWorkout(
-            data,
-            user
-        );
-
+    const result = submitWorkout(data, user);
 
     normalizePigWeight(data);
 
-    saveData(data);
+    await saveData(data);
 
     updateUI();
 
-
-    if (
-        result.alreadyRewardedToday
-    ) {
-        const displayName =
-            user === "winnie"
-                ? "Winnie"
-                : "Jack";
-
-        pigMessageElement.textContent =
-            `${displayName} 今天已經拿過減重獎勵了！`;
+    if (result.alreadyRewardedToday) {
+        const displayName = user === "winnie" ? "Winnie" : "Jack";
+        pigMessageElement.textContent = `${displayName} 今天已經拿過減重獎勵了！`;
     }
 }
 
@@ -333,19 +316,14 @@ if (resetButton) {
 // Real-time Pig Weight
 // ============================================================
 
-setInterval(
-    () => {
+setInterval(() => {
+    updatePigWeight(data);
+    updateUI();
+}, 1000);
 
-        updatePigWeight(data);
-
-        saveData(data);
-
-        updateUI();
-
-    },
-    1000
-);
-
+setInterval(() => {
+    saveData(data);
+}, 20000);
 
 // ============================================================
 // Initialize PigFit

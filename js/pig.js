@@ -56,7 +56,7 @@ export function getPigStatus(weight) {
             meter: 25,
             sprite: "fit",
             message:
-                "我現在超 FIT！"
+                "FIT！"
         };
     }
 
@@ -67,7 +67,7 @@ export function getPigStatus(weight) {
             meter: 40,
             sprite: "healthy",
             message:
-                "目前體態很健康！"
+                "微肉最健康！"
         };
     }
 
