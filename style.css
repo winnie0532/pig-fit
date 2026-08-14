@@ -561,3 +561,52 @@ h1 {
     font-size: 8px;
   }
 }
+/* =========================================================
+   Pig Walk Animation
+   ========================================================= */
+
+.pig {
+  position: relative;
+  z-index: 3;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 180px;
+  height: 180px;
+
+  animation: pig-walk 4s steps(8) infinite alternate;
+}
+
+@keyframes pig-walk {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-120px);
+  }
+}
+
+/* =========================================================
+   Pig Body Size
+   ========================================================= */
+
+/* < 8 kg */
+.pig-sprite.skinny {transform: scale(0.58, 0.82);}
+
+/* 8 ~ 10 kg */
+.pig-sprite.fit {transform: scale(0.78, 0.9);}
+
+/* 10 ~ 12 kg */
+.pig-sprite.healthy {transform: scale(1);}
+
+/* 12 ~ 14 kg */
+.pig-sprite.chubby {transform: scale(1.22, 1.08);}
+
+/* 14 ~ 17 kg */
+.pig-sprite.fat {transform: scale(1.48, 1.18);}
+
+/* >= 17 kg */
+.pig-sprite.mega {transform: scale(1.8, 1.3);}

@@ -28,44 +28,21 @@ import {
 // DOM Elements
 // ============================================================
 
-const pigWeightElement =
-    document.getElementById("pigWeight");
+const pigWeightElement = document.getElementById("pigWeight");
+const pigMessageElement = document.getElementById("pigMessage");
+const meterFillElement = document.getElementById("meterFill");
 
-const pigMessageElement =
-    document.getElementById("pigMessage");
+const bodyStatusElement = document.getElementById("bodyStatus");
+const winnieStatusElement = document.getElementById("winnieStatus");
+const jackStatusElement = document.getElementById("jackStatus");
 
-const meterFillElement =
-    document.getElementById("meterFill");
+const winnieExerciseButton = document.getElementById("winnieExerciseButton");
+const jackExerciseButton = document.getElementById("jackExerciseButton");
+const resetButton = document.getElementById("resetButton");
 
-const bodyStatusElement =
-    document.getElementById("bodyStatus");
+const dayCountElement = document.getElementById("dayCount");
 
-const winnieStatusElement =
-    document.getElementById("winnieStatus");
-
-const jackStatusElement =
-    document.getElementById("jackStatus");
-
-const winnieExerciseButton =
-    document.getElementById(
-        "winnieExerciseButton"
-    );
-
-const jackExerciseButton =
-    document.getElementById(
-        "jackExerciseButton"
-    );
-
-const resetButton =
-    document.getElementById(
-        "resetButton"
-    );
-
-const dayCountElement =
-    document.getElementById(
-        "dayCount"
-    );
-
+const pigSpriteElement = document.querySelector(".pig-sprite");
 
 // ============================================================
 // Game Data
@@ -122,27 +99,22 @@ function updateDayCount() {
 // ============================================================
 
 function updatePigUI() {
-    const status =
-        getPigStatus(
-            data.weight
-        );
+    const status = getPigStatus(data.weight);
 
+    if (pigSpriteElement) {
+        pigSpriteElement.className =`pig-sprite ${status.sprite}`;
+    }
 
     if (pigWeightElement) {
-        pigWeightElement.textContent =
-            data.weight.toFixed(2);
+        pigWeightElement.textContent = data.weight.toFixed(2);
     }
-
 
     if (meterFillElement) {
-        meterFillElement.style.width =
-            `${status.meter}%`;
+        meterFillElement.style.width = `${status.meter}%`;
     }
 
-
     if (bodyStatusElement) {
-        bodyStatusElement.textContent =
-            status.label;
+        bodyStatusElement.textContent = status.label;
     }
 }
 

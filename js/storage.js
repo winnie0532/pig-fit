@@ -4,7 +4,7 @@
 
 export const STORAGE_KEY = "pigFitData";
 
-export const DEFAULT_WEIGHT = 10;
+export const DEFAULT_WEIGHT = 20;
 
 
 // ============================================================
