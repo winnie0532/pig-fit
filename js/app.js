@@ -182,7 +182,7 @@ function updateMessage() {
 
     if (winnieDone && jackDone) {
         pigMessageElement.textContent =
-            "Winnie 和 Jack 今天都有運動！我瘦了！";
+            "Winnie 和 Jack 都好棒❤️寶哩寶哩!!";
 
         return;
     }
@@ -190,7 +190,7 @@ function updateMessage() {
 
     if (winnieDone) {
         pigMessageElement.textContent =
-            "Winnie 今天完成了！Jack 換你了！";
+            "Winnie 好棒！Jack 換你了！";
 
         return;
     }
@@ -198,7 +198,7 @@ function updateMessage() {
 
     if (jackDone) {
         pigMessageElement.textContent =
-            "Jack 今天完成了！Winnie 換你了！";
+            "Jack 好棒！Winnie 換你了！";
 
         return;
     }
@@ -261,7 +261,7 @@ async function handleWorkout(user) {
 
     if (result.alreadyRewardedToday) {
         const displayName = user === "winnie" ? "Winnie" : "Jack";
-        pigMessageElement.textContent = `${displayName} 今天已經拿過減重獎勵了！`;
+        pigMessageElement.textContent = `${displayName} 今天已經運動過啦！`;
     }
 }
 

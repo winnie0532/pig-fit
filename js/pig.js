@@ -45,7 +45,7 @@ export function getPigStatus(weight) {
             meter: 10,
             sprite: "skinny",
             message:
-                "我已經太瘦了啦！"
+                "我好像太瘦了！"
         };
     }
 
@@ -67,7 +67,7 @@ export function getPigStatus(weight) {
             meter: 40,
             sprite: "healthy",
             message:
-                "微肉最健康！"
+                "健康的嘟嘟！"
         };
     }
 
@@ -89,7 +89,7 @@ export function getPigStatus(weight) {
             meter: 80,
             sprite: "fat",
             message:
-                "你們是不是最近偷懶了！"
+                "你們都偷懶不運動！"
         };
     }
 
