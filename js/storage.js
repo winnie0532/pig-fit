@@ -3,7 +3,12 @@
 // ============================================================
 
 import { db } from "./firebase.js";
-import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import {
+    doc,
+    getDoc,
+    onSnapshot,
+    setDoc
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 export const DEFAULT_WEIGHT = 10;
 
@@ -27,7 +32,33 @@ export function createDefaultData() {
     };
 }
 
+function normalizeSavedData(savedData) {
+    const now = Date.now();
 
+    return {
+        weight:
+            typeof savedData.weight === "number"
+                ? savedData.weight
+                : DEFAULT_WEIGHT,
+
+        createdAt:
+            savedData.createdAt || now,
+
+        lastUpdatedAt:
+            savedData.lastUpdatedAt || now,
+
+        winnieWorkoutDate:
+            savedData.winnieWorkoutDate || null,
+
+        jackWorkoutDate:
+            savedData.jackWorkoutDate || null,
+
+        workouts:
+            Array.isArray(savedData.workouts)
+                ? savedData.workouts
+                : []
+    };
+}
 // ============================================================
 // Load
 // ============================================================
@@ -42,17 +73,7 @@ export async function loadData() {
             return newData;
         }
 
-        const savedData = snapshot.data();
-        const now = Date.now();
-
-        return {
-            weight: typeof savedData.weight === "number" ? savedData.weight : DEFAULT_WEIGHT,
-            createdAt: savedData.createdAt || now,
-            lastUpdatedAt: savedData.lastUpdatedAt || now,
-            winnieWorkoutDate: savedData.winnieWorkoutDate || null,
-            jackWorkoutDate: savedData.jackWorkoutDate || null,
-            workouts: Array.isArray(savedData.workouts) ? savedData.workouts : []
-        };
+        return normalizeSavedData(snapshot.data());
 
     } catch (error) {
         console.error("Failed to load PigFit data:", error);
@@ -60,7 +81,28 @@ export async function loadData() {
     }
 }
 
+export function subscribeToData(onDataChanged) {
+    return onSnapshot(
+        PIG_DOCUMENT,
 
+        snapshot => {
+            if (!snapshot.exists()) {
+                return;
+            }
+
+            onDataChanged(
+                normalizeSavedData(snapshot.data())
+            );
+        },
+
+        error => {
+            console.error(
+                "Failed to sync PigFit data:",
+                error
+            );
+        }
+    );
+}
 // ============================================================
 // Save
 // ============================================================

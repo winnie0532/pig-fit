@@ -5,7 +5,8 @@
 import {
     loadData,
     saveData,
-    resetData
+    resetData,
+    subscribeToData
 } from "./storage.js";
 
 
@@ -334,6 +335,11 @@ setInterval(() => {
 
 updatePigWeight(data);
 
-saveData(data);
+await saveData(data);
 
 updateUI();
+
+subscribeToData(remoteData => {
+    data = remoteData;
+    updateUI();
+});
