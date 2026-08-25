@@ -2,9 +2,9 @@
 // PigFit - Workout
 // ============================================================
 
-export const WORKOUT_LOSS = 1;
+export const WORKOUT_LOSS = 0.5;
 
-export const WEEKLY_GOAL_PER_PERSON = 3;
+export const WEEKLY_GOAL_PER_PERSON = 4;
 
 
 // ============================================================
