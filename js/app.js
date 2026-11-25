@@ -21,6 +21,7 @@ import {
     submitWorkout,
     getWeeklyWorkoutCount,
     getTodayString,
+    getYesterdayString,
     WEEKLY_GOAL_PER_PERSON
 } from "./workout.js";
 
@@ -40,6 +41,8 @@ const jackStatusElement = document.getElementById("jackStatus");
 const winnieExerciseButton = document.getElementById("winnieExerciseButton");
 const jackExerciseButton = document.getElementById("jackExerciseButton");
 const resetButton = document.getElementById("resetButton");
+const winnieBackfillButton = document.getElementById("winnieBackfillButton");
+const jackBackfillButton = document.getElementById("jackBackfillButton");
 
 const dayCountElement = document.getElementById("dayCount");
 
@@ -123,6 +126,35 @@ function updatePigUI() {
 // ============================================================
 // Workout UI
 // ============================================================
+
+function hasRewardedWorkoutOnDate(user, date) {
+    const dateField = user === "winnie"
+        ? "winnieWorkoutDate"
+        : "jackWorkoutDate";
+
+    return data[dateField] === date || data.workouts.some(workout =>
+        workout.user === user &&
+        workout.date === date &&
+        workout.rewarded !== false
+    );
+}
+
+
+function updateBackfillButtons() {
+    const yesterday = getYesterdayString();
+
+    [
+        [winnieBackfillButton, "winnie"],
+        [jackBackfillButton, "jack"]
+    ].forEach(([button, user]) => {
+        if (!button) return;
+
+        const alreadyDone = hasRewardedWorkoutOnDate(user, yesterday);
+        button.disabled = alreadyDone;
+        button.textContent = alreadyDone ? "昨天已補登 ✓" : "補登昨天";
+    });
+}
+
 
 function updateWorkoutStatus() {
     const today =
@@ -224,6 +256,8 @@ function updateUI() {
 
     updateWorkoutStatus();
 
+    updateBackfillButtons();
+
     updateDayCount();
 
     updateMessage();
@@ -267,6 +301,34 @@ async function handleWorkout(user) {
 }
 
 
+async function handleBackfillWorkout(user) {
+    const yesterday = getYesterdayString();
+    const displayName = user === "winnie" ? "Winnie" : "Jack";
+
+    if (hasRewardedWorkoutOnDate(user, yesterday)) {
+        alert(`${displayName} 昨天已經補登過囉！`);
+        return;
+    }
+
+    const confirmed = confirm(
+        `確定補登 ${displayName} 昨天（${yesterday}）的運動嗎？\n將新增運動紀錄並扣除 0.5 kg。`
+    );
+
+    if (!confirmed) return;
+
+    updatePigWeight(data);
+    const result = submitWorkout(data, user, yesterday);
+    normalizePigWeight(data);
+
+    if (result.alreadyRewarded) {
+        alert(`${displayName} 昨天已經獲得運動獎勵，沒有重複扣重。`);
+    }
+
+    await saveData(data);
+    updateUI();
+}
+
+
 // ============================================================
 // Buttons
 // ============================================================
@@ -292,6 +354,19 @@ if (jackExerciseButton) {
             );
         }
     );
+}
+
+
+if (winnieBackfillButton) {
+    winnieBackfillButton.addEventListener("click", () => {
+        handleBackfillWorkout("winnie");
+    });
+}
+
+if (jackBackfillButton) {
+    jackBackfillButton.addEventListener("click", () => {
+        handleBackfillWorkout("jack");
+    });
 }
 
 
