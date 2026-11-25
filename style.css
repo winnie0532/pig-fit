@@ -631,9 +631,9 @@ h1 {
 
 .backfill-panel {
   display: grid;
-  grid-template-columns: 1fr 1fr auto;
+  grid-template-columns: 1.2fr 0.85fr auto;
   align-items: end;
-  gap: 10px;
+  gap: 14px;
 
   margin-top: 12px;
   padding: 12px;
@@ -673,4 +673,9 @@ h1 {
   border-width: 3px;
   font-size: 8px;
   box-shadow: 3px 3px 0 var(--dark);
+}
+
+/* Backfill Button */
+#backfillToggleButton {
+  background: #f3a0ad;
 }
