@@ -629,27 +629,13 @@ h1 {
   box-shadow: 4px 4px 0 var(--dark);
 }
 
-/* =========================================================
-   Compact Utility Actions
-   ========================================================= */
-
-.utility-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 8px;
-}
-
-.utility-button {
-  padding: 12px 8px;
-  border-width: 3px;
-  font-size: 8px;
-  box-shadow: 4px 4px 0 var(--dark);
-}
-
 #backfillToggleButton {
   background: #f3a0ad;
 }
+
+/* =========================================================
+   Backfill Form
+   ========================================================= */
 
 .backfill-panel {
   display: grid;
@@ -672,6 +658,7 @@ h1 {
   display: none;
 }
 
+/* Labels */
 .backfill-panel label {
   display: grid;
   grid-template-rows: 14px 42px;
@@ -680,35 +667,56 @@ h1 {
   font-size: 7px;
 }
 
+/* Date and Player */
 .backfill-panel input,
 .backfill-panel select {
   width: 100%;
   min-width: 0;
   height: 42px;
+  min-height: 42px;
   box-sizing: border-box;
 
-  padding: 9px 5px;
+  padding: 0 5px;
 
   border: 2px solid var(--dark);
+  border-radius: 12px;
+
   background: white;
   color: var(--dark);
 
   font-family: inherit;
   font-size: 9px;
+  line-height: normal;
 }
 
+/* Date: horizontal and vertical center */
 .backfill-panel input[type="date"] {
   -webkit-appearance: none;
   appearance: none;
   display: block;
-  line-height: normal;
+  text-align: center;
 }
 
+.backfill-panel input[type="date"]::-webkit-date-and-time-value {
+  text-align: center;
+  line-height: 40px;
+}
+
+/* Player: horizontal and vertical center */
+.backfill-panel select {
+  text-align: center;
+  text-align-last: center;
+  padding: 0 5px;
+}
+
+/* Confirm Button */
 .utility-confirm {
   width: auto;
   height: 42px;
   padding: 10px 12px;
+
   border-width: 3px;
   font-size: 8px;
+
   box-shadow: 3px 3px 0 var(--dark);
 }
