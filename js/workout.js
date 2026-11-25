@@ -32,36 +32,6 @@ export function getTodayString() {
 }
 
 
-export function getYesterdayString() {
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-
-    const year = yesterday.getFullYear();
-    const month = String(yesterday.getMonth() + 1).padStart(2, "0");
-    const day = String(yesterday.getDate()).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-}
-
-
-function getWorkoutDateField(user) {
-    return user === "winnie"
-        ? "winnieWorkoutDate"
-        : "jackWorkoutDate";
-}
-
-
-function hasRewardedWorkout(data, user, date) {
-    const dateField = getWorkoutDateField(user);
-
-    return data[dateField] === date || data.workouts.some(workout =>
-        workout.user === user &&
-        workout.date === date &&
-        workout.rewarded !== false
-    );
-}
-
-
 export function getStartOfWeek(date = new Date()) {
     const result =
         new Date(date);
@@ -94,40 +64,63 @@ export function getStartOfWeek(date = new Date()) {
 // Submit Workout
 // ============================================================
 
-export function submitWorkout(
-    data,
-    user,
-    workoutDate = getTodayString()
-) {
-    const alreadyRewarded =
-        hasRewardedWorkout(data, user, workoutDate);
+export function submitWorkout(data, user) {
+    const today =
+        getTodayString();
 
-    if (!alreadyRewarded) {
-        data.weight -= WORKOUT_LOSS;
+    let alreadyRewardedToday =
+        false;
 
-        const dateField = getWorkoutDateField(user);
 
-        // Keep the latest rewarded date so today's status is not
-        // overwritten when yesterday is entered retroactively.
-        if (!data[dateField] || workoutDate >= data[dateField]) {
-            data[dateField] = workoutDate;
+    // --------------------------------------------------------
+    // Winnie
+    // --------------------------------------------------------
+
+    if (user === "winnie") {
+        alreadyRewardedToday =
+            data.winnieWorkoutDate === today;
+
+        if (!alreadyRewardedToday) {
+            data.weight -= WORKOUT_LOSS;
+
+            data.winnieWorkoutDate =
+                today;
         }
     }
 
-    const timestamp = workoutDate === getTodayString()
-        ? Date.now()
-        : new Date(`${workoutDate}T12:00:00`).getTime();
+
+    // --------------------------------------------------------
+    // Jack
+    // --------------------------------------------------------
+
+    if (user === "jack") {
+        alreadyRewardedToday =
+            data.jackWorkoutDate === today;
+
+        if (!alreadyRewardedToday) {
+            data.weight -= WORKOUT_LOSS;
+
+            data.jackWorkoutDate =
+                today;
+        }
+    }
+
+
+    // --------------------------------------------------------
+    // Workout History
+    // --------------------------------------------------------
 
     data.workouts.push({
         user,
-        date: workoutDate,
-        timestamp,
-        rewarded: !alreadyRewarded
+        date: today,
+        timestamp: Date.now(),
+        rewarded:
+            !alreadyRewardedToday
     });
 
+
     return {
-        alreadyRewardedToday: alreadyRewarded,
-        alreadyRewarded
+        alreadyRewardedToday
     };
 }
 
@@ -154,9 +147,10 @@ export function getWeeklyWorkoutCount(
                 return false;
             }
 
-            const workoutDate = workout.date
-                ? new Date(`${workout.date}T00:00:00`)
-                : new Date(workout.timestamp);
+            const workoutDate =
+                new Date(
+                    workout.timestamp
+                );
 
             return workoutDate >= weekStart;
         }
