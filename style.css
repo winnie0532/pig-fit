@@ -657,6 +657,7 @@ h1 {
 .backfill-panel select {
   width: 100%;
   min-width: 0;
+  height: 42px;
   padding: 9px 5px;
 
   border: 2px solid var(--dark);
@@ -665,6 +666,7 @@ h1 {
 
   font-family: inherit;
   font-size: 9px;
+  box-sizing: border-box;
 }
 
 .utility-confirm {
