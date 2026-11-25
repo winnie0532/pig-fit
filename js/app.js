@@ -379,7 +379,7 @@ if (confirmBackfillButton) {
                     user === "winnie" ? "Winnie" : "Jack";
 
                 alert(
-                    `${displayName} ${workoutDate}\n此筆紀錄已存，不會重複扣重！`
+                    `${displayName} ${workoutDate}\n此筆紀錄已存在，不會重複扣重！`
                 );
 
                 return;
