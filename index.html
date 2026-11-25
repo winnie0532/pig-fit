@@ -89,9 +89,47 @@
         JACK WORKOUT
       </button>
 
-      <button id="resetButton" class="pixel-button danger">
-        RESET
-      </button>
+      <div class="utility-actions">
+
+        <button
+          id="backfillToggleButton"
+          class="pixel-button utility-button"
+        >
+          + BACKFILL
+        </button>
+
+        <button
+          id="resetButton"
+          class="pixel-button danger utility-button"
+        >
+          RESET
+        </button>
+
+      </div>
+
+      <div id="backfillPanel" class="backfill-panel" hidden>
+
+        <label>
+          <span>DATE</span>
+          <input type="date" id="backfillDate">
+        </label>
+
+        <label>
+          <span>PLAYER</span>
+          <select id="backfillUser">
+            <option value="winnie">WINNIE</option>
+            <option value="jack">JACK</option>
+          </select>
+        </label>
+
+        <button
+          id="confirmBackfillButton"
+          class="pixel-button primary utility-confirm"
+        >
+          OK
+        </button>
+
+      </div>
     </section>
 
   </main>

@@ -19,8 +19,10 @@ import {
 
 import {
     submitWorkout,
+    backfillWorkout,
     getWeeklyWorkoutCount,
     getTodayString,
+    getYesterdayString,
     WEEKLY_GOAL_PER_PERSON
 } from "./workout.js";
 
@@ -40,6 +42,20 @@ const jackStatusElement = document.getElementById("jackStatus");
 const winnieExerciseButton = document.getElementById("winnieExerciseButton");
 const jackExerciseButton = document.getElementById("jackExerciseButton");
 const resetButton = document.getElementById("resetButton");
+const backfillToggleButton =
+    document.getElementById("backfillToggleButton");
+
+const backfillPanel =
+    document.getElementById("backfillPanel");
+
+const backfillDateInput =
+    document.getElementById("backfillDate");
+
+const backfillUserSelect =
+    document.getElementById("backfillUser");
+
+const confirmBackfillButton =
+    document.getElementById("confirmBackfillButton");
 
 const dayCountElement = document.getElementById("dayCount");
 
@@ -294,6 +310,103 @@ if (jackExerciseButton) {
     );
 }
 
+// ============================================================
+// Backfill Workout
+// ============================================================
+
+// Default date: yesterday
+if (backfillDateInput) {
+    backfillDateInput.value = getYesterdayString();
+    backfillDateInput.max = getTodayString();
+}
+
+
+// Toggle backfill panel
+if (backfillToggleButton) {
+    backfillToggleButton.addEventListener(
+        "click",
+        () => {
+            const isOpening = backfillPanel.hidden;
+
+            backfillPanel.hidden = !isOpening;
+
+            backfillToggleButton.textContent =
+                isOpening
+                    ? "- CLOSE"
+                    : "+ BACKFILL";
+        }
+    );
+}
+
+
+// Confirm backfill
+if (confirmBackfillButton) {
+    confirmBackfillButton.addEventListener(
+        "click",
+        async () => {
+
+            const workoutDate =
+                backfillDateInput.value;
+
+            const user =
+                backfillUserSelect.value;
+
+            if (!workoutDate) {
+                alert("請選擇運動日期！");
+                return;
+            }
+
+            if (workoutDate > getTodayString()) {
+                alert("不能補登未來日期！");
+                return;
+            }
+
+            // Update natural weight gain
+            updatePigWeight(data);
+
+            // Check and create workout record
+            const result = backfillWorkout(
+                data,
+                user,
+                workoutDate
+            );
+
+            if (result.alreadyExists) {
+                await saveData(data);
+                updateUI();
+
+                const displayName =
+                    user === "winnie" ? "Winnie" : "Jack";
+
+                alert(
+                    `${displayName} ${workoutDate}\n此筆紀錄已存，不會重複扣重！`
+                );
+
+                return;
+            }
+
+            // Normalize weight and save
+            normalizePigWeight(data);
+
+            await saveData(data);
+
+            updateUI();
+
+            const displayName =
+                user === "winnie" ? "Winnie" : "Jack";
+
+            // Close panel after successful backfill
+            backfillPanel.hidden = true;
+
+            backfillToggleButton.textContent =
+                "+ BACKFILL";
+
+            alert(
+                `${displayName} 補登成功！\n豬豬 -0.5 KG ❤️`
+            );
+        }
+    );
+}
 
 // ============================================================
 // Reset
